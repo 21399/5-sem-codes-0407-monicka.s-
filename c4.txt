@@ -1,0 +1,39 @@
+#include <stdlib.h>
+#include <string.h>
+
+char* convert(char* s, int numRows) {
+    int len = strlen(s);
+
+    // If only one row, no conversion is needed
+    if (numRows == 1 || numRows >= len) {
+        char* result = malloc((len + 1) * sizeof(char));
+        strcpy(result, s);
+        return result;
+    }
+
+    char* result = malloc((len + 1) * sizeof(char));
+
+    int index = 0;
+
+    // Process each row
+    for (int row = 0; row < numRows; row++) {
+        int stepDown = 2 * (numRows - 1);
+        int stepDiagonal = 2 * row;
+
+        for (int i = row; i < len; i += stepDown) {
+            // Character going vertically down
+            result[index++] = s[i];
+
+            // Character going diagonally up
+            if (row != 0 &&
+                row != numRows - 1 &&
+                i + stepDown - stepDiagonal < len) {
+                result[index++] = s[i + stepDown - stepDiagonal];
+            }
+        }
+    }
+
+    result[index] = '\0';
+
+    return result;
+}
